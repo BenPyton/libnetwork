@@ -1,15 +1,7 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
-#include "BinSerializer.h"
-
-//#ifdef _DEBUG
-//	//#include "stdio.h"
-//	#define DebugLog(fmt, ...) printf(fmt, ##__VA_ARGS__)
-//#else
-//	#define DebugLog(fmt, ...)
-//#endif
-
+#include "Network/BinSerializer.h"
 
 struct Data : public ISerializable
 {

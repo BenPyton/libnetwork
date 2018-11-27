@@ -3,12 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketsPendu", "SocketsPendu\SocketsPendu.vcxproj", "{2E13431E-69FC-4D4D-B407-2EFA6F69C384}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PenduClient", "sample\PenduClient\SocketsPendu.vcxproj", "{2E13431E-69FC-4D4D-B407-2EFA6F69C384}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B43B32E7-94C7-440D-BBEB-59D8B955286C} = {B43B32E7-94C7-440D-BBEB-59D8B955286C}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketPenduServer", "SocketPenduServer\SocketPenduServer.vcxproj", "{62294F5F-4A48-4ECB-BB15-59782795FB18}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PenduServer", "sample\PenduServer\SocketPenduServer.vcxproj", "{62294F5F-4A48-4ECB-BB15-59782795FB18}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2E13431E-69FC-4D4D-B407-2EFA6F69C384} = {2E13431E-69FC-4D4D-B407-2EFA6F69C384}
 		{B43B32E7-94C7-440D-BBEB-59D8B955286C} = {B43B32E7-94C7-440D-BBEB-59D8B955286C}

@@ -29,7 +29,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="SocketPenduServer.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
