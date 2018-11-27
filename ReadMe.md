@@ -11,7 +11,7 @@ Work only on Windows for now, but I will implement cross-platform socket in futu
 If you have issues with compilation, check the version of windows' SDK in project properties. <br>
 
 ### Use :
-Simple server side application:<br>
+Simple server side application:
 ```cpp
 #include <Network.h>
 
@@ -35,9 +35,10 @@ int main()
 	return 0;
 }
 ```
-<br>
-Simple client side application:<br>
-```cpp
+<br>Simple client side application:<br>
+
+```cpp 
+
 #include <Network.h>
 
 using namespace net;
@@ -59,5 +60,3 @@ int main()
 	return 0;
 }
 ```
-
-
