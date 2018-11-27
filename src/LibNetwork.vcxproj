@@ -18,6 +18,28 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BinSerializer.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="Server.cpp" />
+    <ClCompile Include="Socket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\includes\Exports.h" />
+    <ClInclude Include="..\includes\Network.h" />
+    <ClInclude Include="..\includes\Network\BinSerializer.h" />
+    <ClInclude Include="..\includes\Network\Client.h" />
+    <ClInclude Include="..\includes\Network\Event.h" />
+    <ClInclude Include="..\includes\Network\Server.h" />
+    <ClInclude Include="..\includes\Network\Socket.h" />
+    <ClInclude Include="..\includes\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\includes\Network\BinSerializer.inl" />
+    <None Include="..\includes\Network\Client.inl" />
+    <None Include="..\includes\Network\Server.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{B43B32E7-94C7-440D-BBEB-59D8B955286C}</ProjectGuid>
@@ -100,12 +122,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>LIBNETWORK_EXPORTS;WIN32;_DEBUG;LIBNETWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)includes\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)includes\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>$(ProjectDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
       <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -117,12 +139,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>LIBNETWORK_EXPORTS;_DEBUG;LIBNETWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)includes\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)includes\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>$(ProjectDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
       <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -136,14 +158,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>LIBNETWORK_EXPORTS;WIN32;NDEBUG;LIBNETWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)includes\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)includes\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>$(ProjectDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
       <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -157,39 +179,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>LIBNETWORK_EXPORTS;NDEBUG;LIBNETWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)includes\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)includes\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>$(ProjectDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)lib\$(Platform)\$(TargetName).lib</ImportLibrary>
       <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="includes\Exports.h" />
-    <ClInclude Include="includes\Network.h" />
-    <ClInclude Include="includes\Network\BinSerializer.h" />
-    <ClInclude Include="includes\Network\Client.h" />
-    <ClInclude Include="includes\Network\Event.h" />
-    <ClInclude Include="includes\Network\Server.h" />
-    <ClInclude Include="includes\Network\Socket.h" />
-    <ClInclude Include="includes\Utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="includes\Network\BinSerializer.inl" />
-    <None Include="includes\Network\Client.inl" />
-    <None Include="includes\Network\Server.inl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\BinSerializer.cpp" />
-    <ClCompile Include="src\Client.cpp" />
-    <ClCompile Include="src\Event.cpp" />
-    <ClCompile Include="src\Server.cpp" />
-    <ClCompile Include="src\Socket.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -18,57 +18,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes\Network.h">
+    <ClCompile Include="Server.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BinSerializer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\includes\Network.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="includes\Network\Server.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\Network\Socket.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\Network\BinSerializer.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\Network\Client.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\Network\Event.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="includes\Exports.h">
+    <ClInclude Include="..\includes\Utils.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="includes\Utils.h">
+    <ClInclude Include="..\includes\Exports.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\Server.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\Socket.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\BinSerializer.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\Client.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\Event.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="includes\Network\Server.inl">
+    <None Include="..\includes\Network\Server.inl">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </None>
-    <None Include="includes\Network\BinSerializer.inl">
+    <None Include="..\includes\Network\BinSerializer.inl">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </None>
-    <None Include="includes\Network\Client.inl">
+    <None Include="..\includes\Network\Client.inl">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Event.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Server.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Socket.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BinSerializer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Client.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
