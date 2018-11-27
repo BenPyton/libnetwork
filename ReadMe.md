@@ -5,13 +5,13 @@
 ```
 
 ### Description :
-Simple client-server network API.<\br>
-Work only on Windows for now, but I will implement cross-platform socket in future.<\br>
+Simple client-server network API.<br>
+Work only on Windows for now, but I will implement cross-platform socket in future.<br>
 
-If you have issues with compilation, check the version of windows' SDK in project properties. <\br>
+If you have issues with compilation, check the version of windows' SDK in project properties. <br>
 
 ### Use :
-Simple server side application:<\br>
+Simple server side application:
 ```cpp
 #include <Network.h>
 
@@ -35,8 +35,8 @@ int main()
 	return 0;
 }
 ```
-<\br>
-Simple client side application:<\br>
+<br>Simple client side application:<br>
+
 ```cpp 
 
 #include <Network.h>
@@ -60,5 +60,3 @@ int main()
 	return 0;
 }
 ```
-
-
