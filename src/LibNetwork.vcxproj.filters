@@ -30,7 +30,28 @@
     <ClCompile Include="Event.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="BinSerializer.cpp">
+    <ClCompile Include="Serializer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerUDP.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientUDP.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerV2.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketException.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MsgSystem.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientV2.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,13 +71,34 @@
     <ClInclude Include="..\includes\Network\Socket.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\includes\Network\BinSerializer.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
     <ClInclude Include="..\includes\Network\Client.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\Network\Event.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\Serializer.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\Message.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\ClientUDP.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\ServerUDP.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\ServerV2.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\SocketException.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\MsgSystem.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\ClientV2.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
   </ItemGroup>
@@ -64,10 +106,10 @@
     <None Include="..\includes\Network\Server.inl">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </None>
-    <None Include="..\includes\Network\BinSerializer.inl">
+    <None Include="..\includes\Network\Client.inl">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </None>
-    <None Include="..\includes\Network\Client.inl">
+    <None Include="..\includes\Network\Serializer.inl">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </None>
   </ItemGroup>

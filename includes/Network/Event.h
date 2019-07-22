@@ -3,7 +3,7 @@
 *
 * @file Event.h
 *
-* @date 17/11/2018
+* @date 18/07/2018
 *
 * @brief Event class that call subscribers when emitted
 *
@@ -12,16 +12,14 @@
 #ifndef _EVENT_H
 #define _EVENT_H
 
-//#include <iostream>
 #include <vector>
-#include "Exports.h"
 
 using namespace std;
 
-template<typename T>
+template<typename... Args>
 class Event
 {
-	typedef void(*callback)(T);
+	typedef void(*callback)(Args...);
 	typedef typename vector<callback>::const_iterator subscriber;
 
 private:
@@ -41,11 +39,11 @@ public:
 		m_callbacks.erase(_s);
 	}
 
-	void emit(T _v)
+	void emit(Args... _args)
 	{
 		for (subscriber it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
 		{
-			(*it)(_v);
+			(*it)(_args...);
 		}
 	}
 };

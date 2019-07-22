@@ -1,7 +1,7 @@
 /*
 * @author PELLETIER Benoit
 *
-* @file BinSerializer.h
+* @file Serializer.h
 *
 * @date 25/10/2018
 *
@@ -19,37 +19,36 @@
 
 using namespace std;
 
-class BinSerializer;
+class Serializer;
 class LIBNETWORK_API ISerializable
 {
 public:
 	// Serialize the class or struct
 	// Don't modify _bs.data() directly, only use _bs.serialize() function that already exists
-	virtual void serialize(BinSerializer& _bs) = 0;
+	virtual void serialize(Serializer& _bs) = 0;
 	virtual ~ISerializable() {}
 };
 
-class LIBNETWORK_API BinSerializer
+class LIBNETWORK_API Serializer
 {
 private:
-
-	char* m_buffer = nullptr;
-	uint64_t m_index = 0;
-	bool m_write = false;
 	size_t m_bufferSize = 0;
+	size_t m_index = 0;
 	size_t m_endIndex = 0;
+	char* m_buffer = nullptr;
+	bool m_write = false;
 
 public:
-	LIBNETWORK_API enum Mode {
+	enum class Mode {
 		Read,
 		Write
 	};
 
-	BinSerializer(size_t _bufsize, Mode _mode);
-	BinSerializer(const BinSerializer& _bs);
-	~BinSerializer();
+	Serializer(size_t _bufsize, Mode _mode);
+	Serializer(const Serializer& _bs);
+	~Serializer();
 
-	BinSerializer& operator=(const BinSerializer& _bs);
+	Serializer& operator=(const Serializer& _bs);
 
 	// Accessors
 	// for now, avoid mode change
@@ -73,10 +72,13 @@ public:
 	// Overload with vector type
 	template<typename T> void serialize(vector<T>& _v);
 
+	// Conversion to string
+	inline operator string() { return string(m_buffer, m_endIndex); }
+
 private:
 	void _reallocate(const size_t size);
 };
 
-#include "BinSerializer.inl"
+#include "Serializer.inl"
 
 #endif // _BINSERIALIZER_H

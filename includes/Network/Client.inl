@@ -9,71 +9,57 @@
 *
 */
 
-
-template<typename T>
-void net::Client::send(T& _msg)
+namespace net
 {
-	BinSerializer bs(0, BinSerializer::Write);
-	bs.serialize(_msg);
-	string str(bs.data(), bs.size());
-
-	m_mutToSendQueue.lock();
-	m_toSend.push(str);
-	m_mutToSendQueue.unlock();
-}
-
-template<typename T>
-bool net::Client::pollMsg(T& _data)
-{
-	bool success = false;
-	string msg;
-	m_mutRecvFromQueue.lock();
-	if (!m_recvFrom.empty())
+	template<typename T>
+	void Client::send(T& _msg)
 	{
-		msg = m_recvFrom.front();
-		m_recvFrom.pop();
-		success = true;
-		DebugLog("[Client pollMsg] Msg recieved from server !\n");
-	}
-	m_mutRecvFromQueue.unlock();
+		Serializer bs(0, Serializer::Mode::Write);
+		bs.serialize(_msg);
+		string str(bs.data(), bs.size());
 
-	if (success)
-	{
-		BinSerializer bs(0, BinSerializer::Read);
-		bs.resize(msg.size());
-		memcpy(bs.data(), msg.c_str(), msg.size());
-		bs.serialize(_data);
+		AddMsgToSendingQueue(str);
 	}
 
-	return success;
-}
+	template<typename T>
+	bool Client::pollMsg(T& _data)
+	{
+		bool received = false;
+		string msg;
 
-template<typename T>
-void net::Client::waitMsg(T& _msg)
-{
-	bool recieved = false;
-	string recvMsg;
-	DebugLog("[Client waitMsg] Wait for server msg\n");
-	while (!recieved) {
-		m_mutRecvFromQueue.lock();
-		if (!m_recvFrom.empty())
+		received = GetMsgFromReceivingQueue(msg);
+		if (received)
 		{
-			DebugLog("[Client waitMsg] Msg recieved!\n");
-			recvMsg = m_recvFrom.front();
-			m_recvFrom.pop();
-			recieved = true;
+			DebugLog("[Client pollMsg] Msg received from server !\n");
+			Serializer bs(0, Serializer::Mode::Read);
+			bs.resize(msg.size());
+			memcpy(bs.data(), msg.c_str(), msg.size());
+			bs.serialize(_data);
 		}
-		m_mutRecvFromQueue.unlock();
-		if (!recieved) // block
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		}
-		else
-		{
-			BinSerializer bs(0, BinSerializer::Read);
-			bs.resize(recvMsg.size());
-			memcpy(bs.data(), recvMsg.c_str(), recvMsg.size());
-			bs.serialize(_msg);
+
+		return received;
+	}
+
+	template<typename T>
+	void Client::waitMsg(T& _msg)
+	{
+		bool received = false;
+		string msg;
+		DebugLog("[Client waitMsg] Wait for server msg...\n");
+		while (!received) {
+			received = GetMsgFromReceivingQueue(msg);
+			if (!received) // block
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			}
+			else
+			{
+				DebugLog("[Client waitMsg] Msg received from server !\n");
+				Serializer bs(0, Serializer::Mode::Read);
+				bs.resize(msg.size());
+				memcpy(bs.data(), msg.c_str(), msg.size());
+				bs.serialize(_msg);
+			}
 		}
 	}
 }

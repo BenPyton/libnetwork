@@ -14,24 +14,23 @@
 
 #include <iostream>
 #include <thread>
+#include <atomic>
 #include <mutex>
 #include <queue>
-#include <vector>
-#include <atomic>
-#include "Socket.h"
-#include "Event.h"
 #include "Exports.h"
+#include "Network/Serializer.h"
 #include "Utils.h"
-#include "Network/BinSerializer.h"
 
 using namespace std;
 
 namespace net{
+	class Socket;
+	enum class Protocol;
 
 	class LIBNETWORK_API Client
 	{
 	private:
-		Socket* m_sock;
+		Socket* m_pSock;
 		queue<string> m_toSend;
 		queue<string> m_recvFrom;
 		mutex m_mutToSendQueue;
@@ -44,17 +43,17 @@ namespace net{
 
 	public:
 		Client();
-		Client(const Client& _c);
+		Client(const Client& _c) = delete;
 
 		~Client();
 
-		void connect(wstring _addr, unsigned short _port, Socket::Protocol _protocol);
+		void connect(string _addr, unsigned short _port, Protocol _protocol);
 		void shutdown();
 
 		template<typename T> void send(T& msg);
 
-		// Return true and fill msg by first recieved message if any
-		// If no recieved message then return false and don't modify msg
+		// Return true and fill msg by first received message if any
+		// If no received message then return false and don't modify msg
 		template<typename T> bool pollMsg(T& _data);
 
 		// Block execution until a msg is recv from server
@@ -63,6 +62,12 @@ namespace net{
 	private:
 		void RunSendToServer();
 		void RunRecvFromServer();
+
+		void AddMsgToSendingQueue(const string& _msg);
+		bool GetMsgFromSendingQueue(string& _msg);
+
+		void AddMsgToReceivingQueue(const string& _msg);
+		bool GetMsgFromReceivingQueue(string& _msg);
 	};
 }
 

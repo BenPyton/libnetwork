@@ -1,7 +1,7 @@
 /*
 * @author PELLETIER Benoit
 *
-* @file BinSerializer.inl
+* @file Serializer.inl
 *
 * @date 25/10/2018
 *
@@ -10,7 +10,7 @@
 */
 
 template<typename T>
-void BinSerializer::serialize(T& _v)
+void Serializer::serialize(T& _v)
 {
 	if (is_base_of<ISerializable, T>::value)
 	{
@@ -46,7 +46,7 @@ void BinSerializer::serialize(T& _v)
 }
 
 template<>
-void BinSerializer::serialize(string & _v)
+void Serializer::serialize(string & _v)
 {
 	if (m_write)
 	{
@@ -85,7 +85,7 @@ void BinSerializer::serialize(string & _v)
 }
 
 template<typename T>
-void BinSerializer::serialize(vector<T>& _v)
+void Serializer::serialize(vector<T>& _v)
 {
 	if (m_write)
 	{

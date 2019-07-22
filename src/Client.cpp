@@ -9,8 +9,8 @@
 *
 */
 
+#include "Network/Socket.h"
 #include "Network/Client.h"
-#include "Network/BinSerializer.h"
 
 namespace net{
 	Client::Client()
@@ -18,19 +18,15 @@ namespace net{
 		m_running = false;
 	}
 
-	Client::Client(const Client& _c)
-	{
-	}
-
 	Client::~Client()
 	{
 	}
 
-	void Client::connect(wstring _addr, unsigned short _port, Socket::Protocol _protocol)
+	void Client::connect(string _addr, unsigned short _port, Protocol _protocol)
 	{
-		m_sock = new Socket(_addr, _port, _protocol); 
+		m_pSock = new Socket(_addr, _port, _protocol); 
 		DebugLog("[Client connect] Connecting to server...\n");
-		m_sock->Connect();
+		m_pSock->Connect();
 		printf("[Client connect] Connected to server!\n");
 		m_running = true;
 
@@ -44,45 +40,37 @@ namespace net{
 		m_threadToSend.join();
 		m_threadRecvFrom.join();
 
-		m_sock->Close();
-		delete m_sock;
+		m_pSock->Close();
+		delete m_pSock;
 	}
 
 	void Client::RunSendToServer()
 	{
 		DebugLog("[Thread SendToServer] Thread started !\n");
 		bool sending = false;
-		string sendMsg;
-		BinSerializer serializer(sizeof(size_t), BinSerializer::Write);
+		string msg;
+		Serializer serializer(sizeof(size_t), Serializer::Mode::Write);
 		serializer.resize(sizeof(size_t));
 		while (m_running)
 		{
 			sending = false;
 			try
 			{
-				// Pop msg to send from queue if any
-				m_mutToSendQueue.lock();
-				if (!m_toSend.empty())
-				{
-					sendMsg = m_toSend.front();
-					m_toSend.pop();
-					sending = true;
-				}
-				m_mutToSendQueue.unlock();
+				sending = GetMsgFromSendingQueue(msg);
 
 				if (sending)
 				{
 					DebugLog("[Thread SendToServer] Sending data to server...\n");
 					// Send data size
-					size_t size = sendMsg.size();
+					size_t size = msg.size();
 					serializer.rewind();
 					serializer.serialize(size);
-					m_sock->Send(serializer.data(), serializer.size());
+					m_pSock->Send(serializer.data(), serializer.size());
 
 					DebugLog("[Thread SendToServer] Sended data length: %d\n", size);
 
 					// Send data
-					m_sock->Send(sendMsg.c_str(), size);
+					m_pSock->Send(msg.c_str(), size);
 
 					DebugLog("[Thread SendToServer] Successful!\n");
 				}
@@ -99,7 +87,7 @@ namespace net{
 	void Client::RunRecvFromServer()
 	{
 		DebugLog("[Thread RecvFromServer] Thread started !\n");
-		BinSerializer serializer(sizeof(size_t), BinSerializer::Read);
+		Serializer serializer(sizeof(size_t), Serializer::Mode::Read);
 		serializer.resize(sizeof(size_t));
 		while (m_running)
 		{
@@ -107,22 +95,19 @@ namespace net{
 			{
 				// Recv data size for next recv
 				size_t size = 0;
-				m_sock->Recv(serializer.data(), serializer.size());
+				m_pSock->Recv(serializer.data(), serializer.size());
 				serializer.rewind();
 				serializer.serialize(size);
 
-				DebugLog("[Thread RecvFromServer] Recieving data from server...\n");
+				DebugLog("[Thread RecvFromServer] Receiving data from server...\n");
 				// Recv data
 				string str(size, 0);
 				char* buffer = (char*)malloc(sizeof(char) * size);
-				m_sock->Recv(buffer, size);
+				m_pSock->Recv(buffer, size);
 				str.assign(buffer, size);
 				free(buffer);
 
-				// Push recieved msg to queue
-				m_mutRecvFromQueue.lock();
-				m_recvFrom.push(str);
-				m_mutRecvFromQueue.unlock();
+				AddMsgToReceivingQueue(str);
 				DebugLog("[Thread RecvFromServer] Successful!\n");
 			}
 			catch (exception e)
@@ -132,5 +117,47 @@ namespace net{
 			}
 		}
 		DebugLog("[Thread RecvFromServer] Thread terminated !\n");
+	}
+
+	void Client::AddMsgToSendingQueue(const string & _msg)
+	{
+		m_mutToSendQueue.lock();
+		m_toSend.push(_msg);
+		m_mutToSendQueue.unlock();
+	}
+
+	bool Client::GetMsgFromSendingQueue(string & _msg)
+	{
+		bool sending = false;
+		m_mutToSendQueue.lock();
+		if (!m_toSend.empty())
+		{
+			_msg = std::move(m_toSend.front());
+			m_toSend.pop();
+			sending = true;
+		}
+		m_mutToSendQueue.unlock();
+		return sending;
+	}
+
+	void Client::AddMsgToReceivingQueue(const string & _msg)
+	{
+		m_mutRecvFromQueue.lock();
+		m_recvFrom.push(_msg);
+		m_mutRecvFromQueue.unlock();
+	}
+
+	bool Client::GetMsgFromReceivingQueue(string & _msg)
+	{
+		bool received = false;
+		m_mutRecvFromQueue.lock();
+		if (!m_recvFrom.empty())
+		{
+			_msg = std::move(m_recvFrom.front());
+			m_recvFrom.pop();
+			received = true;
+		}
+		m_mutRecvFromQueue.unlock();
+		return received;
 	}
 }

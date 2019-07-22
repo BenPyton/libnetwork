@@ -9,15 +9,11 @@
 *
 */
 
+#include "Network/Socket.h"
 #include "Network/Server.h"
-#include "Network/BinSerializer.h"
 
 namespace net{
 	Server::Server()
-	{
-	}
-
-	Server::Server(const Server& _s)
 	{
 	}
 
@@ -38,11 +34,11 @@ namespace net{
 		return size;
 	}
 
-	void Server::launch(wstring _addr, unsigned short _port, Socket::Protocol _protocol)
+	void Server::launch(string _addr, unsigned short _port, Protocol _protocol)
 	{
-		m_server = new Socket(_addr, _port, _protocol);
-		m_server->Bind();
-		m_server->Listen();
+		m_pServer = new Socket(_addr, _port, _protocol);
+		m_pServer->Bind();
+		m_pServer->Listen();
 
 		m_running = true;
 
@@ -65,42 +61,43 @@ namespace net{
 		m_mutClientVector.unlock();
 
 		// close and delete server socket
-		m_server->Close();
-		delete m_server;
+		m_pServer->Close();
+		delete m_pServer;
 	}
 
 	void Server::RunSendToClient(Socket* client)
 	{
 		DebugLog("[Thread SendToClient] Thread started !\n");
 		bool sending = false;
-		Message sendMsg;
-		BinSerializer serializer(sizeof(size_t), BinSerializer::Write);
+		Message msg;
+		Serializer serializer(sizeof(size_t), Serializer::Mode::Write);
 		serializer.resize(sizeof(size_t));
 		while (m_running && _ClientIsRunning(client))
 		{
 			try {
 				sending = false;
 				// Pop msg to send from queue if any
-				m_mutToSendQueue.lock();
+				/*m_mutToSendQueue.lock();
 				if (!m_toSend.empty() && m_toSend.front().client == client)
 				{
-					sendMsg = m_toSend.front();
+					msg = m_toSend.front();
 					m_toSend.pop();
 					sending = true;
 				}
-				m_mutToSendQueue.unlock();
+				m_mutToSendQueue.unlock();*/
+				sending = GetMsgFromSendingQueue(msg, client);
 
 				if (sending)
 				{
 					DebugLog("[Thread SendToClient] Send to client #%p\n", client);
 					// Send data size
-					size_t size = sendMsg.msg.size();
+					size_t size = msg.msg.size();
 					DebugLog("[Thread SendToClient] Sending data length: %d\n", size);
 					serializer.rewind();
 					serializer.serialize(size);
-					sendMsg.client->Send(serializer.data(), serializer.size());
+					msg.client->Send(serializer.data(), serializer.size());
 					// Send data
-					sendMsg.client->Send(sendMsg.msg.c_str(), size);
+					msg.client->Send(msg.msg.c_str(), size);
 					DebugLog("[Thread SendToClient] Successful !\n");
 				}
 			}
@@ -116,7 +113,7 @@ namespace net{
 	void Server::RunRecvFromClient(Socket* client)
 	{
 		DebugLog("[Thread RecvFromClient] Thread started !\n");
-		BinSerializer serializer(sizeof(size_t), BinSerializer::Read);
+		Serializer serializer(sizeof(size_t), Serializer::Mode::Read);
 		serializer.resize(sizeof(size_t));
 		while (m_running && _ClientIsRunning(client))
 		{
@@ -127,7 +124,7 @@ namespace net{
 				serializer.rewind();
 				serializer.serialize(size);
 
-				DebugLog("[Thread RecvFromClient] Recieve from client #%p\n", client);
+				DebugLog("[Thread RecvFromClient] Receive from client #%p\n", client);
 
 				// Recv data
 				string str(size, 0);
@@ -136,14 +133,15 @@ namespace net{
 				str.assign(buffer, size);
 				free(buffer);
 
-				DebugLog("[Thread RecvFromClient] Recieved data length from client: %d\n", str.size());
-				DebugLog("[Thread RecvFromClient] Recieved data from client: %s\n", str.c_str());
+				DebugLog("[Thread RecvFromClient] Received data length from client: %d\n", str.size());
+				DebugLog("[Thread RecvFromClient] Received data from client: %s\n", str.c_str());
 
 				// Push recieved msg to queue
-				Message msg = { client, str };
+				/*Message msg = { client, str };
 				m_mutRecvFromQueue.lock();
 				m_recvFrom.push(msg);
-				m_mutRecvFromQueue.unlock();
+				m_mutRecvFromQueue.unlock();*/
+				AddMsgToReceivingQueue({ client, str });
 			}
 			catch (exception e)
 			{
@@ -173,7 +171,7 @@ namespace net{
 		while (m_running)
 		{
 			DebugLog("[Thread AcceptClient] Waiting client connection...\n");
-			Socket* sock = new Socket(m_server->Accept());
+			Socket* sock = new Socket(m_pServer->Accept());
 
 			m_mutClientVector.lock();
 			m_clients.push_back(sock);
@@ -190,6 +188,48 @@ namespace net{
 			m_clientConnectionEvent.emit(sock);
 		}
 		DebugLog("[Thread AcceptClient] Thread terminated !\n");
+	}
+
+	void Server::AddMsgToSendingQueue(const Message & _msg)
+	{
+		m_mutToSendQueue.lock();
+		m_toSend.push(_msg);
+		m_mutToSendQueue.unlock();
+	}
+
+	bool Server::GetMsgFromSendingQueue(Message & _msg, Socket* _client)
+	{
+		bool sending = false;
+		m_mutToSendQueue.lock();
+		if (!m_toSend.empty() && (nullptr == _client || m_toSend.front().client == _client))
+		{
+			_msg = m_toSend.front();
+			m_toSend.pop();
+			sending = true;
+		}
+		m_mutToSendQueue.unlock();
+		return sending;
+	}
+
+	void Server::AddMsgToReceivingQueue(const Message & _msg)
+	{
+		m_mutRecvFromQueue.lock();
+		m_recvFrom.push(_msg);
+		m_mutRecvFromQueue.unlock();
+	}
+
+	bool Server::GetMsgFromReceivingQueue(Message & _msg, Socket* _client)
+	{
+		bool received = false;
+		m_mutRecvFromQueue.lock();
+		if (!m_recvFrom.empty() && (nullptr == _client || m_recvFrom.front().client == _client))
+		{
+			_msg = std::move(m_recvFrom.front());
+			m_recvFrom.pop();
+			received = true;
+		}
+		m_mutRecvFromQueue.unlock();
+		return received;
 	}
 
 	bool Server::_ClientIsRunning(Socket * _client)
