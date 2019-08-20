@@ -31,6 +31,7 @@
     <ClCompile Include="ClientV2.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="MsgSystem.cpp" />
+    <ClCompile Include="Ping.cpp" />
     <ClCompile Include="Serializer.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="..\includes\Network\ClientV2.h" />
     <ClInclude Include="..\includes\Network\Message.h" />
     <ClInclude Include="..\includes\Network\MsgSystem.h" />
+    <ClInclude Include="..\includes\Network\Ping.h" />
     <ClInclude Include="..\includes\Network\Serializer.h" />
     <ClInclude Include="..\includes\Network\Client.h" />
     <ClInclude Include="..\includes\Network\Event.h" />

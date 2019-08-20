@@ -35,7 +35,7 @@ namespace net
 			Size data_size;
 		};
 
-		static const Size max_size = 32;
+		static const Size max_size = 512;
 		static const Size data_max_size = max_size - sizeof(Header);
 
 		Header header;

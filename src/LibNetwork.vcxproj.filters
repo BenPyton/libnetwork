@@ -54,6 +54,9 @@
     <ClCompile Include="ClientV2.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Ping.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\includes\Network.h">
@@ -99,6 +102,9 @@
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\Network\ClientV2.h">
+      <Filter>Fichiers d%27en-tête\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\Network\Ping.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
   </ItemGroup>
