@@ -11,7 +11,5 @@
 #include "Network/Message.h"
 #include "Network/Server.h"
 #include "Network/Client.h"
-#include "Network/ServerV2.h"
-#include "Network/ClientV2.h"
 
 #endif // _NETWORK_H

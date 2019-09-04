@@ -3,17 +3,20 @@
 *
 * @file Server.cpp
 *
-* @date 18/11/2018
+* @date 17/07/2019
 *
-* @brief Define server that can be connected with multiple clients
+* @brief Define a server class, communicating with multiple clients
 *
 */
 
 #include "Network/Socket.h"
+#include "Network/Message.h"
 #include "Network/Server.h"
+#include "Network/SocketException.h"
 
 namespace net{
 	Server::Server()
+		: MsgSystem()
 	{
 	}
 
@@ -25,227 +28,86 @@ namespace net{
 		}
 	}
 
-	size_t Server::nbClient()
+	void Server::launch(string _addr, unsigned short _port)
 	{
-		size_t size = 0;
-		m_mutClientVector.lock();
-		size = m_clients.size();
-		m_mutClientVector.unlock();
-		return size;
-	}
+		if (m_running)
+		{
+			throw new exception("Can't launch server when already running.");
+		}
 
-	void Server::launch(string _addr, unsigned short _port, Protocol _protocol)
-	{
-		m_pServer = new Socket(_addr, _port, _protocol);
+		m_pServer = new Socket(_addr, _port, Protocol::TCP);
 		m_pServer->Bind();
 		m_pServer->Listen();
 
 		m_running = true;
-
-		m_threadServerAccept = thread(&Server::RunAcceptClient, this);
+		RunThreads();
+		m_threadServerAccept = thread(&Server::_RunAcceptClient, this);
 	}
 
 	void Server::shutdown()
 	{
-		m_running = false;
-		// wait for client accepting thread to terminate
-		m_threadServerAccept.join();
-
-		// close and delete all client sockets
-		m_mutClientVector.lock();
-		for (vector<Socket*>::iterator it = m_clients.begin(); it != m_clients.end(); ++it)
+		if (!m_running)
 		{
-			(*it)->Close();
-			delete *it;
+			throw exception("Can't stop server when not running.");
 		}
-		m_mutClientVector.unlock();
+
+		m_running = false;
+
+		// wait for threads to terminate
+		m_threadServerAccept.join();
+		WaitEndOfThreads();
+		CloseAllSockets();
 
 		// close and delete server socket
 		m_pServer->Close();
 		delete m_pServer;
 	}
 
-	void Server::RunSendToClient(Socket* client)
+	void Server::send(Socket * _client, string _msg)
 	{
-		DebugLog("[Thread SendToClient] Thread started !\n");
-		bool sending = false;
-		Message msg;
-		Serializer serializer(sizeof(size_t), Serializer::Mode::Write);
-		serializer.resize(sizeof(size_t));
-		while (m_running && _ClientIsRunning(client))
+		if (m_running)
 		{
-			try {
-				sending = false;
-				// Pop msg to send from queue if any
-				/*m_mutToSendQueue.lock();
-				if (!m_toSend.empty() && m_toSend.front().client == client)
-				{
-					msg = m_toSend.front();
-					m_toSend.pop();
-					sending = true;
-				}
-				m_mutToSendQueue.unlock();*/
-				sending = GetMsgFromSendingQueue(msg, client);
-
-				if (sending)
-				{
-					DebugLog("[Thread SendToClient] Send to client #%p\n", client);
-					// Send data size
-					size_t size = msg.msg.size();
-					DebugLog("[Thread SendToClient] Sending data length: %d\n", size);
-					serializer.rewind();
-					serializer.serialize(size);
-					msg.client->Send(serializer.data(), serializer.size());
-					// Send data
-					msg.client->Send(msg.msg.c_str(), size);
-					DebugLog("[Thread SendToClient] Successful !\n");
-				}
-			}
-			catch (exception e)
-			{
-				// Here stop client threads
-			}
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			AddMsgToSendQueue(_client, _msg);
 		}
-		DebugLog("[Thread SendToClient] Thread terminated !\n");
 	}
 
-	void Server::RunRecvFromClient(Socket* client)
+	void Server::broadcast(string _msg)
 	{
-		DebugLog("[Thread RecvFromClient] Thread started !\n");
-		Serializer serializer(sizeof(size_t), Serializer::Mode::Read);
-		serializer.resize(sizeof(size_t));
-		while (m_running && _ClientIsRunning(client))
-		{
-			try {
-				// Recv data size for next recv
-				size_t size;
-				client->Recv(serializer.data(), serializer.size());
-				serializer.rewind();
-				serializer.serialize(size);
-
-				DebugLog("[Thread RecvFromClient] Receive from client #%p\n", client);
-
-				// Recv data
-				string str(size, 0);
-				char* buffer = (char*)malloc(sizeof(char) * size);
-				client->Recv(buffer, size);
-				str.assign(buffer, size);
-				free(buffer);
-
-				DebugLog("[Thread RecvFromClient] Received data length from client: %d\n", str.size());
-				DebugLog("[Thread RecvFromClient] Received data from client: %s\n", str.c_str());
-
-				// Push recieved msg to queue
-				/*Message msg = { client, str };
-				m_mutRecvFromQueue.lock();
-				m_recvFrom.push(msg);
-				m_mutRecvFromQueue.unlock();*/
-				AddMsgToReceivingQueue({ client, str });
-			}
-			catch (exception e)
-			{
-				printf("[Thread RecvFromClient] Client #%p disconnected !\n", client);
-				m_clientDisconnectionEvent.emit(client);
-				// Remove client from client vector
-				m_mutClientVector.lock();
-				for (vector<Socket*>::iterator it = m_clients.begin(); it != m_clients.end(); ++it)
-				{
-					if ((*it) == client)
-					{
-						m_clients.erase(it);
-						break;
-					}
-				}
-				m_mutClientVector.unlock();
-				client->Close(); // close socket just in case
-				delete client; // Free allocated memory
-			}
-		}
-		DebugLog("[Thread RecvFromClient] Thread terminated !\n");
+		send(NULL, _msg);
 	}
 
-	void Server::RunAcceptClient()
+	void Server::_RunAcceptClient()
 	{
+		fd_set acceptfds;
+		timeval timeout;
+
 		DebugLog("[Thread AcceptClient] Thread started !\n");
 		while (m_running)
 		{
-			DebugLog("[Thread AcceptClient] Waiting client connection...\n");
-			Socket* sock = new Socket(m_pServer->Accept());
+			//clear the socket set
+			FD_ZERO(&acceptfds);
 
-			m_mutClientVector.lock();
-			m_clients.push_back(sock);
-			m_mutClientVector.unlock();
+			//add master socket to set
+			FD_SET(m_pServer->GetSock(), &acceptfds);
 
-			thread sendThread(&Server::RunSendToClient, this, sock);
-			thread recvThread(&Server::RunRecvFromClient, this, sock);
+			timeout.tv_sec = 0;
+			timeout.tv_usec = 200 * 1000;
+			if(select(m_pServer->GetSock() + 1, &acceptfds, NULL, NULL, &timeout) < 0) // update sockets in file descriptor
+			{
+				DebugLog("\n[Thread AcceptClient] Error during select.\n");
+			}
 
-			// detach thread so they will run on their own
-			sendThread.detach();
-			recvThread.detach();
+			if (FD_ISSET(m_pServer->GetSock(), &acceptfds))
+			{
+				DebugLog("[Thread AcceptClient] Accepting incoming client connection...\n");
+				Socket* sock = new Socket(m_pServer->Accept());
 
-			printf("[Thread AcceptClient] Client #%p connected !\n", sock);
-			m_clientConnectionEvent.emit(sock);
+				AddSocket(sock);
+			}
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		}
+
 		DebugLog("[Thread AcceptClient] Thread terminated !\n");
 	}
-
-	void Server::AddMsgToSendingQueue(const Message & _msg)
-	{
-		m_mutToSendQueue.lock();
-		m_toSend.push(_msg);
-		m_mutToSendQueue.unlock();
-	}
-
-	bool Server::GetMsgFromSendingQueue(Message & _msg, Socket* _client)
-	{
-		bool sending = false;
-		m_mutToSendQueue.lock();
-		if (!m_toSend.empty() && (nullptr == _client || m_toSend.front().client == _client))
-		{
-			_msg = m_toSend.front();
-			m_toSend.pop();
-			sending = true;
-		}
-		m_mutToSendQueue.unlock();
-		return sending;
-	}
-
-	void Server::AddMsgToReceivingQueue(const Message & _msg)
-	{
-		m_mutRecvFromQueue.lock();
-		m_recvFrom.push(_msg);
-		m_mutRecvFromQueue.unlock();
-	}
-
-	bool Server::GetMsgFromReceivingQueue(Message & _msg, Socket* _client)
-	{
-		bool received = false;
-		m_mutRecvFromQueue.lock();
-		if (!m_recvFrom.empty() && (nullptr == _client || m_recvFrom.front().client == _client))
-		{
-			_msg = std::move(m_recvFrom.front());
-			m_recvFrom.pop();
-			received = true;
-		}
-		m_mutRecvFromQueue.unlock();
-		return received;
-	}
-
-	bool Server::_ClientIsRunning(Socket * _client)
-	{
-		bool isClient = false;
-		m_mutClientVector.lock();
-		for (std::vector<Socket*>::iterator it = m_clients.begin(); it != m_clients.end(); ++it)
-		{
-			if (*it == _client)
-			{
-				isClient = true;
-				break;
-			}
-		}
-		m_mutClientVector.unlock();
-		return isClient;
-	}
-
 }

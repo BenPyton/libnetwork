@@ -18,13 +18,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Server.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Socket.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Client.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Event.cpp">
@@ -36,25 +30,16 @@
     <ClCompile Include="Message.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="ServerUDP.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientUDP.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerV2.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="SocketException.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="MsgSystem.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="ClientV2.cpp">
+    <ClCompile Include="Client.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Ping.cpp">
+    <ClCompile Include="Server.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,13 +53,7 @@
     <ClInclude Include="..\includes\Exports.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\includes\Network\Server.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
     <ClInclude Include="..\includes\Network\Socket.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\includes\Network\Client.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\Network\Event.h">
@@ -86,35 +65,20 @@
     <ClInclude Include="..\includes\Network\Message.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\includes\Network\ClientUDP.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\includes\Network\ServerUDP.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\includes\Network\ServerV2.h">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </ClInclude>
     <ClInclude Include="..\includes\Network\SocketException.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\includes\Network\MsgSystem.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\includes\Network\ClientV2.h">
+    <ClInclude Include="..\includes\Network\Client.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\includes\Network\Ping.h">
+    <ClInclude Include="..\includes\Network\Server.h">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\includes\Network\Server.inl">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </None>
-    <None Include="..\includes\Network\Client.inl">
-      <Filter>Fichiers d%27en-tête\Network</Filter>
-    </None>
     <None Include="..\includes\Network\Serializer.inl">
       <Filter>Fichiers d%27en-tête\Network</Filter>
     </None>
