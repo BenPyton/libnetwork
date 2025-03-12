@@ -17,9 +17,8 @@
 #include <vector>
 #include "Exports.h"
 
-using namespace std;
-
 class Serializer;
+
 class LIBNETWORK_API ISerializable
 {
 public:
@@ -32,9 +31,9 @@ public:
 class LIBNETWORK_API Serializer
 {
 private:
-	size_t m_bufferSize = 0;
-	size_t m_index = 0;
-	size_t m_endIndex = 0;
+	std::size_t m_bufferSize = 0;
+	std::size_t m_index = 0;
+	std::size_t m_endIndex = 0;
 	char* m_buffer = nullptr;
 	bool m_write = false;
 
@@ -45,7 +44,7 @@ public:
 		Write
 	};
 
-	Serializer(size_t _bufsize, Mode _mode);
+	Serializer(std::size_t _bufsize, Mode _mode);
 	Serializer(const Serializer& _bs);
 	~Serializer();
 
@@ -55,14 +54,14 @@ public:
 	// for now, avoid mode change
 	// inline void setMode(Mode _mode) { m_write = (_mode == Mode::Write); }
 	// inline Mode getMode() { return (m_write == true) ? Mode::Write : Mode::Read; }
-	inline size_t capacity() { return m_bufferSize; }
-	inline size_t size() { return m_endIndex; }
+	inline std::size_t capacity() { return m_bufferSize; }
+	inline std::size_t size() { return m_endIndex; }
 	inline char* data() { return m_buffer; }
 
 	// Methods
 	void clearBuffer(char _v = 0); // set all buffer data to value _v
 	inline void rewind() { m_index = 0; }
-	void resize(size_t _size);
+	void resize(std::size_t _size);
 
 	// Templates
 	template<class T>
@@ -74,13 +73,13 @@ public:
 
 	// Overload with vector type
 	template<typename T>
-	void serialize(vector<T>& _v);
+	void serialize(std::vector<T>& _v);
 
 	// Conversion to string
-	inline operator string() { return string(m_buffer, m_endIndex); }
+	inline operator std::string() { return std::string(m_buffer, m_endIndex); }
 
 private:
-	void _reallocate(const size_t size);
+	void _reallocate(const std::size_t size);
 };
 
 #include "Serializer.inl"

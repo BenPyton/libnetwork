@@ -14,16 +14,14 @@
 
 #include <vector>
 
-using namespace std;
-
 template<typename... Args>
 class Event
 {
 	typedef void (*callback)(Args...);
-	typedef typename vector<callback>::const_iterator subscriber;
+	typedef typename std::vector<callback>::const_iterator subscriber;
 
 private:
-	vector<callback> m_callbacks;
+	std::vector<callback> m_callbacks;
 
 public:
 	Event() {}

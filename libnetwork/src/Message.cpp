@@ -14,7 +14,7 @@
 
 namespace net
 {
-	size_t Fragment::size() const
+	std::size_t Fragment::size() const
 	{
 		return sizeof(Header) + header.data_size;
 	}
@@ -52,10 +52,10 @@ namespace net
 		}
 	}
 
-	string Message::getString()
+	std::string Message::getString()
 	{
-		string str = "";
-		for (set<Fragment>::iterator it = m_fragments.begin(); it != m_fragments.end(); ++it)
+		std::string str = "";
+		for (std::set<Fragment>::iterator it = m_fragments.begin(); it != m_fragments.end(); ++it)
 		{
 			str.append(it->data.data(), it->header.data_size);
 		}
@@ -63,9 +63,9 @@ namespace net
 		return str;
 	}
 
-	vector<Fragment> Message::FragmentString(uint16_t _id, const string& _str)
+	std::vector<Fragment> Message::FragmentString(uint16_t _id, const std::string& _str)
 	{
-		vector<Fragment> fragments;
+		std::vector<Fragment> fragments;
 
 		uint16_t lastFragSize = _str.size() % Fragment::data_max_size;
 		uint16_t nbFrag = _str.size() / Fragment::data_max_size + (lastFragSize != 0 ? 1 : 0);
@@ -88,9 +88,9 @@ namespace net
 		return fragments;
 	}
 
-	vector<Fragment> Message::FragmentBuffer(uint16_t _id, const char* _buf, size_t _size)
+	std::vector<Fragment> Message::FragmentBuffer(uint16_t _id, const char* _buf, size_t _size)
 	{
-		vector<Fragment> fragments;
+		std::vector<Fragment> fragments;
 
 		uint16_t lastFragSize = _size % Fragment::data_max_size;
 		uint16_t nbFrag = _size / Fragment::data_max_size + (lastFragSize != 0 ? 1 : 0);

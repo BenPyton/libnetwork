@@ -15,22 +15,19 @@
 #include "MsgSystem.h"
 #include "Exports.h"
 
-using namespace std;
-
 namespace net
 {
-
 	class LIBNETWORK_API Client : public MsgSystem
 	{
 	public:
 		Client();
 		~Client();
 
-		void connect(string _addr, unsigned short _port);
+		void connect(std::string _addr, unsigned short _port);
 		void disconnect();
 
-		void send(string _msg);
+		void send(std::string _msg);
 	};
 } //namespace net
 
-#endif // _CLIENTV2_H
+#endif // _CLIENT_H

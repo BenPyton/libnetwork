@@ -29,7 +29,7 @@ namespace net
 		}
 	}
 
-	void Client::connect(string _addr, unsigned short _port)
+	void Client::connect(std::string _addr, unsigned short _port)
 	{
 		if (m_running)
 		{
@@ -59,7 +59,7 @@ namespace net
 		CloseAllSockets();
 	}
 
-	void Client::send(string _msg)
+	void Client::send(std::string _msg)
 	{
 		if (m_running)
 		{

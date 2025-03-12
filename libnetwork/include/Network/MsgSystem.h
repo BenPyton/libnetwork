@@ -17,9 +17,8 @@
 #include <atomic>
 #include <queue>
 #include <list>
+#include <string>
 #include "Event.h"
-
-using namespace std;
 
 namespace net
 {
@@ -29,37 +28,37 @@ namespace net
 	class MsgSystem
 	{
 	protected:
-		typedef list<Socket*>::iterator SocketIt;
+		typedef std::list<Socket*>::iterator SocketIt;
 
 		struct PairClientMessage
 		{
 			Socket* socket;
-			string message;
+			std::string message;
 		};
 
-		list<Socket*> m_sockets;
-		vector<Socket*> m_connectedSockets;
-		vector<Socket*> m_disconnectedSockets;
+		std::list<Socket*> m_sockets;
+		std::vector<Socket*> m_connectedSockets;
+		std::vector<Socket*> m_disconnectedSockets;
 
 		std::atomic<bool> m_running = false;
 
 	private:
-		thread m_threadSendMsg;
-		thread m_threadRecvMsg;
-		thread m_threadEvent;
+		std::thread m_threadSendMsg;
+		std::thread m_threadRecvMsg;
+		std::thread m_threadEvent;
 
-		mutex m_mutSocketList;
-		mutex m_mutMsgToSendQueue;
-		mutex m_mutMsgRecvFromQueue;
-		mutex m_mutConnectedSocket;
-		mutex m_mutDisconnectedSocket;
+		std::mutex m_mutSocketList;
+		std::mutex m_mutMsgToSendQueue;
+		std::mutex m_mutMsgRecvFromQueue;
+		std::mutex m_mutConnectedSocket;
+		std::mutex m_mutDisconnectedSocket;
 
-		queue<PairClientMessage> m_msgToSend;
-		queue<PairClientMessage> m_msgRecvFrom;
+		std::queue<PairClientMessage> m_msgToSend;
+		std::queue<PairClientMessage> m_msgRecvFrom;
 
 		int m_currentMsgId = 0;
 
-		Event<Socket*, string> m_messageReceivedEvent;
+		Event<Socket*, std::string> m_messageReceivedEvent;
 		Event<Socket*> m_connectionEvent;
 		Event<Socket*> m_disconnectionEvent;
 
@@ -68,7 +67,7 @@ namespace net
 		~MsgSystem();
 
 		// Event triggered when a message is received from any connected socket
-		Event<Socket*, string>& onMessageReceived() { return m_messageReceivedEvent; }
+		Event<Socket*, std::string>& onMessageReceived() { return m_messageReceivedEvent; }
 
 		// Event triggered when a remote socket is connected
 		Event<Socket*>& onConnection() { return m_connectionEvent; }
@@ -85,7 +84,7 @@ namespace net
 
 		void AddSocket(Socket* _sock);
 		void RemoveSocket(SocketIt _it);
-		void AddMsgToSendQueue(Socket* _sock, string _msg);
+		void AddMsgToSendQueue(Socket* _sock, std::string _msg);
 
 	private:
 		void _RunSendMessages();

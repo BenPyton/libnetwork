@@ -19,8 +19,6 @@
 #include <set>
 #include "Utils.h"
 
-using namespace std;
-
 namespace net
 {
 	struct LIBNETWORK_API Fragment
@@ -41,7 +39,7 @@ namespace net
 		Header header;
 		std::array<char, data_max_size> data;
 
-		size_t size() const;
+		std::size_t size() const;
 		friend bool operator<(const Fragment& _a, const Fragment& _b);
 	};
 
@@ -50,7 +48,7 @@ namespace net
 	private:
 		uint16_t m_id;
 		uint16_t m_nbFrag;
-		set<Fragment> m_fragments;
+		std::set<Fragment> m_fragments;
 		bool m_completed;
 
 	public:
@@ -60,17 +58,17 @@ namespace net
 
 		inline uint64_t id() { return m_id; }
 		inline uint16_t totalFrag() { return m_nbFrag; }
-		inline size_t size() { return m_fragments.size(); }
+		inline std::size_t size() { return m_fragments.size(); }
 		inline bool isComplete() { return m_completed; }
 
 		void addFragment(const Fragment& _f);
-		string getString();
+		std::string getString();
 
 		Message& operator=(const Message& _m) = delete;
 		Message& operator=(Message&& _m);
 
-		static vector<Fragment> FragmentString(uint16_t _id, const string& _str);
-		static vector<Fragment> FragmentBuffer(uint16_t _id, const char* _buf, size_t _size);
+		static std::vector<Fragment> FragmentString(uint16_t _id, const std::string& _str);
+		static std::vector<Fragment> FragmentBuffer(uint16_t _id, const char* _buf, std::size_t _size);
 
 	private:
 		void _swap(Message& _m);

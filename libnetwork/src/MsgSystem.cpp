@@ -14,6 +14,7 @@
 #include "Network/Message.h"
 #include "Network/SocketException.h"
 #include "Utils.h"
+#include <algorithm>
 
 namespace net
 {
@@ -27,9 +28,9 @@ namespace net
 
 	void MsgSystem::RunThreads()
 	{
-		m_threadSendMsg = thread(&MsgSystem::_RunSendMessages, this);
-		m_threadRecvMsg = thread(&MsgSystem::_RunRecvMessages, this);
-		m_threadEvent = thread(&MsgSystem::_RunEvent, this);
+		m_threadSendMsg = std::thread(&MsgSystem::_RunSendMessages, this);
+		m_threadRecvMsg = std::thread(&MsgSystem::_RunRecvMessages, this);
+		m_threadEvent = std::thread(&MsgSystem::_RunEvent, this);
 	}
 
 	void MsgSystem::WaitEndOfThreads()
@@ -68,7 +69,7 @@ namespace net
 		m_mutSocketList.unlock();
 	}
 
-	void MsgSystem::AddMsgToSendQueue(Socket* _sock, string _msg)
+	void MsgSystem::AddMsgToSendQueue(Socket* _sock, std::string _msg)
 	{
 		m_mutMsgToSendQueue.lock();
 		m_msgToSend.push({_sock, _msg});
@@ -97,7 +98,7 @@ namespace net
 			if (sendMsg)
 			{
 				DebugLog("[Thread SendMsg] Sending message #%d with data: %s\n", m_currentMsgId, msgToSend.message.c_str());
-				vector<Fragment> fragments = Message::FragmentString(m_currentMsgId, msgToSend.message);
+				std::vector<Fragment> fragments = Message::FragmentString(m_currentMsgId, msgToSend.message);
 				int result = 0;
 				for (int i = 0; i < fragments.size(); i++)
 				{
@@ -139,8 +140,8 @@ namespace net
 		timeval timeout;
 
 		// list of uncompleted messages, waiting here to be completed
-		vector<Message> pendingMsg;
-		vector<SocketIt> pendingClose;
+		std::vector<Message> pendingMsg;
+		std::vector<SocketIt> pendingClose;
 
 		DebugLog("[Thread RecvMsg] Thread started !\n");
 		while (m_running)
@@ -199,7 +200,7 @@ namespace net
 						Fragment fragment;
 						memcpy(reinterpret_cast<char*>(&fragment), buffer, Fragment::max_size);
 
-						vector<Message>::iterator msg_it = find_if(pendingMsg.begin(), pendingMsg.end(), [&fragment](Message& _msg) -> bool { return _msg.id() == fragment.header.msg_id; });
+						std::vector<Message>::iterator msg_it = find_if(pendingMsg.begin(), pendingMsg.end(), [&fragment](Message& _msg) -> bool { return _msg.id() == fragment.header.msg_id; });
 
 						if (msg_it == pendingMsg.end()) // not found then create a new msg
 						{
@@ -216,7 +217,7 @@ namespace net
 						//DebugLog("Message Completed: %s\n", msg->isComplete() ? "Yes" : "No");
 						if (msg->isComplete())
 						{
-							string recvdMsg = msg->getString();
+							std::string recvdMsg = msg->getString();
 
 							m_mutMsgRecvFromQueue.lock();
 							m_msgRecvFrom.push({client, recvdMsg});

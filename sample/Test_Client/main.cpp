@@ -3,24 +3,22 @@
 #include <Network.h>
 #include <regex> // to check IP format
 
-using namespace std;
-
 bool connected = false;
 
 void OnMessageReceived(net::Socket* _sock, std::string _msg)
 {
 	// Simply print the received message
-	printf("%s\n", _msg.c_str());
+	std::cout << _msg << std::endl;
 }
 
 void OnConnection(net::Socket* _server)
 {
-	printf("Connected to the server!\n\n\n");
+	std::cout << "Connected to the server!" << std::endl << std::endl << std::endl;
 }
 
 void OnDisconnection(net::Socket* _server)
 {
-	printf("Lost connection with the server...\n");
+	std::cout << "Lost connection with the server..." << std::endl;
 	connected = false;
 }
 

@@ -6,7 +6,7 @@
 struct Data : public ISerializable
 {
 	bool success;
-	vector<char> pos;
+	std::vector<char> pos;
 
 	virtual void serialize(Serializer& _bs) override
 	{

@@ -147,7 +147,7 @@ namespace net
 		return result;
 	}
 
-	int Socket::SendTo(const char* _buf, int _len, string _dst_addr, unsigned short _dst_port)
+	int Socket::SendTo(const char* _buf, int _len, std::string _dst_addr, unsigned short _dst_port)
 	{
 		int result = -1;
 		if (m_protocol != Protocol::UDP)
@@ -168,7 +168,7 @@ namespace net
 		return result;
 	}
 
-	int Socket::RecvFrom(char* _buf, int _len, string& _src_addr, unsigned short& _src_port)
+	int Socket::RecvFrom(char* _buf, int _len, std::string& _src_addr, unsigned short& _src_port)
 	{
 		int result = -1;
 		if (m_protocol != Protocol::UDP)
@@ -206,7 +206,7 @@ namespace net
 		closesocket(m_socket);
 	}
 
-	string Socket::GetIP()
+	std::string Socket::GetIP()
 	{
 		if (m_cachedIP == "")
 		{
@@ -237,7 +237,7 @@ namespace net
 		WSACleanup();
 	}
 
-	string Socket::GetHostName()
+	std::string Socket::GetHostName()
 	{
 		char bufHost[255];
 		memset(bufHost, 0, 255);
@@ -245,10 +245,10 @@ namespace net
 		{
 			_PrintErrorAndExit("Error when getting host name");
 		}
-		return string(bufHost);
+		return std::string(bufHost);
 	}
 
-	vector<string> Socket::GetLocalIP(string _nodeName, string _serviceName, Protocol _protocol, IPVersion _ipversion)
+	std::vector<std::string> Socket::GetLocalIP(std::string _nodeName, std::string _serviceName, Protocol _protocol, IPVersion _ipversion)
 	{
 		addrinfo hints;
 		memset(&hints, 0, sizeof(hints));
@@ -264,9 +264,9 @@ namespace net
 			_PrintErrorAndExit("Error when getting address info");
 		}
 
-		vector<string> ipList;
+		std::vector<std::string> ipList;
 		UINT16 port;
-		string addr;
+		std::string addr;
 		for (addrinfo* pInfo = infos; pInfo != nullptr; pInfo = pInfo->ai_next)
 		{
 			_GetAddrStrAndPort((sockaddr_in*)pInfo->ai_addr, addr, port);
@@ -286,14 +286,14 @@ namespace net
 		return *this;
 	}
 
-	void Socket::_PrintErrorAndExit(string _msg)
+	void Socket::_PrintErrorAndExit(std::string _msg)
 	{
 		int err = WSAGetLastError();
 		DebugLog("[Error] %s: %d\n", _msg.c_str(), err);
 		throw SocketException(_msg.c_str(), err);
 	}
 
-	void Socket::_GetAddrStrAndPort(sockaddr_in* _addr, string& _str, UINT16& _port)
+	void Socket::_GetAddrStrAndPort(sockaddr_in* _addr, std::string& _str, UINT16& _port)
 	{
 		char bufAddr[INET6_ADDRSTRLEN];
 		memset(bufAddr, 0, INET6_ADDRSTRLEN);
@@ -303,7 +303,7 @@ namespace net
 		}
 		else
 		{
-			_str = string(bufAddr);
+			_str = std::string(bufAddr);
 			_port = ntohs(_addr->sin_port);
 		}
 	}

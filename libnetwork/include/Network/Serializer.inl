@@ -12,7 +12,7 @@
 template<typename T>
 void Serializer::serialize(T& _v)
 {
-	if (is_base_of<ISerializable, T>::value)
+	if (std::is_base_of<ISerializable, T>::value)
 	{
 		// On fait du gros gros forcing pour caster en ISerializable (dynamic_cast ne fonctionne pas sur T*)
 		// On est certain que ca fonctionnera car on teste juste avant si la classe T derive de ISerializable
@@ -24,7 +24,7 @@ void Serializer::serialize(T& _v)
 	{
 		if (m_write)
 		{
-			size_t byteSize = sizeof(T);
+			std::size_t byteSize = sizeof(T);
 
 			// Reallocate if necessary
 			if (m_bufferSize < m_index + byteSize)
@@ -46,12 +46,12 @@ void Serializer::serialize(T& _v)
 }
 
 template<>
-void Serializer::serialize(string& _v)
+void Serializer::serialize(std::string& _v)
 {
 	if (m_write)
 	{
-		size_t size = _v.size();
-		size_t byteSize = size * sizeof(char);
+		std::size_t size = _v.size();
+		std::size_t byteSize = size * sizeof(char);
 
 		// add string size before data
 		serialize(size);
@@ -70,12 +70,12 @@ void Serializer::serialize(string& _v)
 	}
 	else // read
 	{
-		size_t size;
+		std::size_t size;
 		// get string size before data
 		serialize(size);
 		// get string data (char by char)
 		_v.resize(size);
-		for (size_t i = 0; i < size; i++)
+		for (std::size_t i = 0; i < size; i++)
 		{
 			_v[i] = (m_buffer + m_index)[i];
 		}
@@ -85,22 +85,22 @@ void Serializer::serialize(string& _v)
 }
 
 template<typename T>
-void Serializer::serialize(vector<T>& _v)
+void Serializer::serialize(std::vector<T>& _v)
 {
 	if (m_write)
 	{
-		size_t size = _v.size();
+		std::size_t size = _v.size();
 		// add vector size before data
 		serialize(size);
 
-		size_t byteSize = sizeof(T);
+		std::size_t byteSize = sizeof(T);
 		// Reallocate if necessary
 		if (m_bufferSize < m_index + size * byteSize)
 		{
 			resize(m_index + size * byteSize);
 		}
 
-		for (typename vector<T>::iterator it = _v.begin(); it != _v.end(); ++it)
+		for (typename std::vector<T>::iterator it = _v.begin(); it != _v.end(); ++it)
 		{
 			serialize(*it);
 		}
@@ -115,12 +115,12 @@ void Serializer::serialize(vector<T>& _v)
 	}
 	else // read
 	{
-		size_t size;
+		std::size_t size;
 		// get vector size before data
 		serialize(size);
 		_v.resize(size); // resize the vector
 		// Get vector elements one by one
-		for (size_t i = 0; i < size; i++)
+		for (std::size_t i = 0; i < size; i++)
 		{
 			serialize(_v[i]);
 		}

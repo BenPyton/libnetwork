@@ -23,8 +23,6 @@
 
 // https://broux.developpez.com/articles/c/sockets/
 
-using namespace std;
-
 namespace net
 {
 
@@ -46,10 +44,10 @@ namespace net
 		sockaddr_in m_sin;
 		Protocol m_protocol;
 
-		string m_cachedIP;
+		std::string m_cachedIP;
 
 	public:
-		Socket(string _addr, unsigned short _port, Protocol _p);
+		Socket(std::string _addr, unsigned short _port, Protocol _p);
 		Socket(const Socket& _s) = delete; // no copy constructor
 		Socket(Socket&& _s);			   // move contructor
 		~Socket();
@@ -60,26 +58,26 @@ namespace net
 		bool Connect();
 		int Send(const char* _buf, int _len);
 		int Recv(char* _buf, int _len);
-		int SendTo(const char* _buf, int _len, string _dst_addr, unsigned short _dst_port);
-		int RecvFrom(char* _buf, int _len, string& _src_addr, unsigned short& _src_port);
+		int SendTo(const char* _buf, int _len, std::string _dst_addr, unsigned short _dst_port);
+		int RecvFrom(char* _buf, int _len, std::string& _src_addr, unsigned short& _src_port);
 		void Close();
 
-		string GetIP();
+		std::string GetIP();
 		UINT16 GetPort();
 		SOCKET GetSock() { return m_socket; }
 
 		static bool Init();
 		static void Quit();
-		static string GetHostName();
-		static vector<string> GetLocalIP(string _nodeName, string _serviceName, Protocol _protocol = Protocol::TCP, IPVersion _ipversion = IPVersion::IPV4);
+		static std::string GetHostName();
+		static std::vector<std::string> GetLocalIP(std::string _nodeName, std::string _serviceName, Protocol _protocol = Protocol::TCP, IPVersion _ipversion = IPVersion::IPV4);
 
 		Socket& operator=(Socket&& _s);
 		Socket& operator=(const Socket& _s) = delete;
 
 	private:
 		Socket(SOCKET _sock, sockaddr_in _addr, Protocol _p);
-		static void _PrintErrorAndExit(string _msg);
-		static void _GetAddrStrAndPort(sockaddr_in* _addr, string& _str, UINT16& _port);
+		static void _PrintErrorAndExit(std::string _msg);
+		static void _GetAddrStrAndPort(sockaddr_in* _addr, std::string& _str, UINT16& _port);
 	};
 } //namespace net
 
