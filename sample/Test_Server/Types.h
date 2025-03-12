@@ -8,12 +8,11 @@ struct Data : public ISerializable
 	bool success;
 	vector<char> pos;
 
-	virtual void serialize(Serializer & _bs) override
+	virtual void serialize(Serializer& _bs) override
 	{
 		_bs.serialize(success);
 		_bs.serialize(pos);
 	}
 };
-
 
 #endif // _TYPES_H

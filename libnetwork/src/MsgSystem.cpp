@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file MsgSystem.cpp
-*
-* @date 18/07/2019
-*
-* @brief Define a base class that manage messages
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file MsgSystem.cpp
+ *
+ * @date 18/07/2019
+ *
+ * @brief Define a base class that manage messages
+ *
+ */
 
 #include "Network/MsgSystem.h"
 #include "Network/Socket.h"
@@ -15,7 +15,8 @@
 #include "Network/SocketException.h"
 #include "Utils.h"
 
-namespace net {
+namespace net
+{
 	MsgSystem::MsgSystem()
 	{
 	}
@@ -67,10 +68,10 @@ namespace net {
 		m_mutSocketList.unlock();
 	}
 
-	void MsgSystem::AddMsgToSendQueue(Socket * _sock, string _msg)
+	void MsgSystem::AddMsgToSendQueue(Socket* _sock, string _msg)
 	{
 		m_mutMsgToSendQueue.lock();
-		m_msgToSend.push({ _sock, _msg });
+		m_msgToSend.push({_sock, _msg});
 		m_mutMsgToSendQueue.unlock();
 	}
 
@@ -92,7 +93,6 @@ namespace net {
 				sendMsg = true;
 			}
 			m_mutMsgToSendQueue.unlock();
-
 
 			if (sendMsg)
 			{
@@ -165,7 +165,7 @@ namespace net {
 
 			//wait for an activity on one of the sockets , timeout is NULL , so wait indefinitely
 			timeout.tv_sec = 0;
-			timeout.tv_usec = 100000; // 100 ms of timeout
+			timeout.tv_usec = 100000;									   // 100 ms of timeout
 			activity = select(max_sd + 1, &readfds, NULL, NULL, &timeout); // update sockets in file descriptor
 
 			int result = 0;
@@ -176,7 +176,7 @@ namespace net {
 				{
 					// get a fragment
 					DebugLog("\n[Thread RecvMsg] Receiving message...\n");
-					char buffer[Fragment::max_size] = { 0 };
+					char buffer[Fragment::max_size] = {0};
 					try
 					{
 						//result = socket->RecvFrom(buffer, net::Fragment::max_size, srcAddr, srcPort);
@@ -199,8 +199,7 @@ namespace net {
 						Fragment fragment;
 						memcpy(reinterpret_cast<char*>(&fragment), buffer, Fragment::max_size);
 
-						vector<Message>::iterator msg_it = find_if(pendingMsg.begin(), pendingMsg.end(),
-							[&fragment](Message& _msg) -> bool { return _msg.id() == fragment.header.msg_id; });
+						vector<Message>::iterator msg_it = find_if(pendingMsg.begin(), pendingMsg.end(), [&fragment](Message& _msg) -> bool { return _msg.id() == fragment.header.msg_id; });
 
 						if (msg_it == pendingMsg.end()) // not found then create a new msg
 						{
@@ -220,7 +219,7 @@ namespace net {
 							string recvdMsg = msg->getString();
 
 							m_mutMsgRecvFromQueue.lock();
-							m_msgRecvFrom.push({ client, recvdMsg });
+							m_msgRecvFrom.push({client, recvdMsg});
 							m_mutMsgRecvFromQueue.unlock();
 
 							pendingMsg.erase(msg_it);
@@ -230,12 +229,11 @@ namespace net {
 					{
 						pendingClose.push_back(it);
 
-						if(result == 0)
+						if (result == 0)
 							DebugLog("[Thread RecvMsg] Connection properly closed.\n");
 						else
 							DebugLog("[Thread RecvMsg] Error while receiving message from [%s].\n", client->GetIP().c_str());
 					}
-
 				}
 			}
 
@@ -290,7 +288,6 @@ namespace net {
 				m_messageReceivedEvent.emit(pair.socket, pair.message);
 			}
 
-
 			// Trigger Disconnection Event for each disconnected socket, and delete them
 			m_mutDisconnectedSocket.lock();
 			for (int i = 0; i < m_disconnectedSockets.size(); i++)
@@ -304,9 +301,8 @@ namespace net {
 			m_disconnectedSockets.clear();
 			m_mutDisconnectedSocket.unlock();
 
-
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		}
 		DebugLog("[Thread Event] Thread terminated !\n");
 	}
-}
+} //namespace net

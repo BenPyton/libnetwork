@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Message.h
-*
-* @date 08/02/2019
-*
-* @brief Manage fragmented message transiting throught network
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Message.h
+ *
+ * @date 08/02/2019
+ *
+ * @brief Manage fragmented message transiting throught network
+ *
+ */
 
 #ifndef _MESSAGE_H
 #define _MESSAGE_H
@@ -45,7 +45,6 @@ namespace net
 		friend bool operator<(const Fragment& _a, const Fragment& _b);
 	};
 
-
 	class LIBNETWORK_API Message
 	{
 	private:
@@ -76,6 +75,6 @@ namespace net
 	private:
 		void _swap(Message& _m);
 	};
-}
+} //namespace net
 
 #endif // _MESSAGE_H

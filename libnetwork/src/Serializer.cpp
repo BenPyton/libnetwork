@@ -1,27 +1,32 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Serializer.cpp
-*
-* @date 25/10/2018
-*
-* @brief Serialize some object into char arrays
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Serializer.cpp
+ *
+ * @date 25/10/2018
+ *
+ * @brief Serialize some object into char arrays
+ *
+ */
 
 #include "Network/Serializer.h"
 
-
 Serializer::Serializer(size_t _bufsize, Mode _mode)
-	:m_buffer(nullptr), m_bufferSize(1), m_endIndex(0), m_index(0)
+	: m_buffer(nullptr)
+	, m_bufferSize(1)
+	, m_endIndex(0)
+	, m_index(0)
 {
 	m_write = (_mode == Mode::Write);
 
 	m_buffer = (char*)malloc(m_bufferSize * sizeof(char));
 }
 
-Serializer::Serializer(const Serializer & _bs)
-	:m_buffer(nullptr), m_bufferSize(_bs.m_bufferSize), m_endIndex(_bs.m_endIndex), m_index(_bs.m_index)
+Serializer::Serializer(const Serializer& _bs)
+	: m_buffer(nullptr)
+	, m_bufferSize(_bs.m_bufferSize)
+	, m_endIndex(_bs.m_endIndex)
+	, m_index(_bs.m_index)
 {
 	m_write = _bs.m_write;
 
@@ -37,7 +42,7 @@ Serializer::~Serializer()
 	}
 }
 
-Serializer & Serializer::operator=(const Serializer & _bs)
+Serializer& Serializer::operator=(const Serializer& _bs)
 {
 	char* localBuffer = (char*)malloc(_bs.m_bufferSize);
 	// Stop here if malloc failed (localBuffer == nullptr)

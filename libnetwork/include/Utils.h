@@ -8,6 +8,5 @@
 	#define DebugLog(fmt, ...)
 	#define WDebugLog(fmt, ...)
 #endif
-	
-#endif // _UTILS_H
 
+#endif // _UTILS_H

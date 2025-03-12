@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Event.cpp
-*
-* @date 17/11/2018
-*
-* @brief Event class that call subscribers when emitted
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Event.cpp
+ *
+ * @date 17/11/2018
+ *
+ * @brief Event class that call subscribers when emitted
+ *
+ */
 
 #include "Network/Event.h"
 

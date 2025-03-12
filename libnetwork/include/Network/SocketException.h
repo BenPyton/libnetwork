@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file SocketException.h
-*
-* @date 18/07/2019
-*
-* @brief Define an exception for socket class
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file SocketException.h
+ *
+ * @date 18/07/2019
+ *
+ * @brief Define an exception for socket class
+ *
+ */
 
 #ifndef _SOCKETEXCEPTION_H
 #define _SOCKETEXCEPTION_H
@@ -16,7 +16,8 @@
 #include <exception>
 #include "Exports.h"
 
-namespace net{
+namespace net
+{
 
 	class LIBNETWORK_API SocketException : public std::exception
 	{
@@ -30,6 +31,6 @@ namespace net{
 
 		inline int code() { return m_code; }
 	};
-}
+} //namespace net
 
 #endif // _SOCKETEXCEPTION_H

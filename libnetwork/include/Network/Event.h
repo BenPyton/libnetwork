@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Event.h
-*
-* @date 18/07/2018
-*
-* @brief Event class that call subscribers when emitted
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Event.h
+ *
+ * @date 18/07/2018
+ *
+ * @brief Event class that call subscribers when emitted
+ *
+ */
 
 #ifndef _EVENT_H
 #define _EVENT_H
@@ -19,14 +19,14 @@ using namespace std;
 template<typename... Args>
 class Event
 {
-	typedef void(*callback)(Args...);
+	typedef void (*callback)(Args...);
 	typedef typename vector<callback>::const_iterator subscriber;
 
 private:
 	vector<callback> m_callbacks;
 
 public:
-	Event() { }
+	Event() {}
 
 	subscriber subscribe(callback _cb)
 	{

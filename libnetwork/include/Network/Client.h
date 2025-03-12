@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Client.h
-*
-* @date 18/07/2019
-*
-* @brief Simple client class
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Client.h
+ *
+ * @date 18/07/2019
+ *
+ * @brief Simple client class
+ *
+ */
 
 #ifndef _CLIENT_H
 #define _CLIENT_H
@@ -17,7 +17,8 @@
 
 using namespace std;
 
-namespace net{
+namespace net
+{
 
 	class LIBNETWORK_API Client : public MsgSystem
 	{
@@ -30,6 +31,6 @@ namespace net{
 
 		void send(string _msg);
 	};
-}
+} //namespace net
 
 #endif // _CLIENTV2_H

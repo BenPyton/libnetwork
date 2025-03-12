@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file MsgSystem.h
-*
-* @date 18/07/2019
-*
-* @brief Define a base class that manage messages
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file MsgSystem.h
+ *
+ * @date 18/07/2019
+ *
+ * @brief Define a base class that manage messages
+ *
+ */
 
 #ifndef _MSGSYSTEM_H
 #define _MSGSYSTEM_H
@@ -21,7 +21,8 @@
 
 using namespace std;
 
-namespace net {
+namespace net
+{
 
 	class Socket;
 
@@ -36,7 +37,7 @@ namespace net {
 			string message;
 		};
 
-		list<Socket*> m_sockets; 
+		list<Socket*> m_sockets;
 		vector<Socket*> m_connectedSockets;
 		vector<Socket*> m_disconnectedSockets;
 
@@ -91,6 +92,6 @@ namespace net {
 		void _RunRecvMessages();
 		void _RunEvent();
 	};
-}
+} //namespace net
 
 #endif // _MSGSYSTEM_H

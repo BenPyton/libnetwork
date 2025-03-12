@@ -1,20 +1,21 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Client.cpp
-*
-* @date 18/07/2019
-*
-* @brief Simple client class
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Client.cpp
+ *
+ * @date 18/07/2019
+ *
+ * @brief Simple client class
+ *
+ */
 
 #include "Network/Client.h"
 #include "Network/Socket.h"
 #include "Network/SocketException.h"
 #include "Utils.h"
 
-namespace net{
+namespace net
+{
 	Client::Client()
 		: MsgSystem()
 	{
@@ -65,4 +66,4 @@ namespace net{
 			AddMsgToSendQueue(m_sockets.front(), _msg);
 		}
 	}
-}
+} //namespace net

@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Socket.cpp
-*
-* @date 26/10/2018
-*
-* @brief Windows socket class
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Socket.cpp
+ *
+ * @date 26/10/2018
+ *
+ * @brief Windows socket class
+ *
+ */
 
 #include "Network/Socket.h"
 #include <Ws2tcpip.h>
@@ -33,7 +33,8 @@ namespace net
 			m_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 			m_sin.sin_addr.s_addr = INADDR_ANY;
 			break;
-		default: break;
+		default:
+			break;
 		}
 
 		if (m_socket == INVALID_SOCKET)
@@ -45,16 +46,17 @@ namespace net
 		m_sin.sin_port = htons(_port);
 	}
 
-	Socket::Socket(Socket && _s)
+	Socket::Socket(Socket&& _s)
 	{
 		std::swap(m_protocol, _s.m_protocol);
 		std::swap(m_socket, _s.m_socket);
 		std::swap(m_sin, _s.m_sin);
 	}
 
-
 	Socket::Socket(SOCKET _sock, sockaddr_in _sin, Protocol _p)
-		: m_socket(_sock), m_sin(_sin), m_protocol(_p)
+		: m_socket(_sock)
+		, m_sin(_sin)
+		, m_protocol(_p)
 	{
 		//memset(&m_sin, 0, sizeof(m_sin));
 	}
@@ -117,7 +119,7 @@ namespace net
 		return success;
 	}
 
-	int Socket::Send(const char * _buf, int _len)
+	int Socket::Send(const char* _buf, int _len)
 	{
 		int result = -1;
 		if (m_protocol != Protocol::TCP)
@@ -131,7 +133,7 @@ namespace net
 		return result;
 	}
 
-	int Socket::Recv(char * _buf, int _len)
+	int Socket::Recv(char* _buf, int _len)
 	{
 		int result = -1;
 		if (m_protocol != Protocol::TCP)
@@ -145,7 +147,7 @@ namespace net
 		return result;
 	}
 
-	int Socket::SendTo(const char * _buf, int _len, string _dst_addr, unsigned short _dst_port)
+	int Socket::SendTo(const char* _buf, int _len, string _dst_addr, unsigned short _dst_port)
 	{
 		int result = -1;
 		if (m_protocol != Protocol::UDP)
@@ -166,7 +168,7 @@ namespace net
 		return result;
 	}
 
-	int Socket::RecvFrom(char * _buf, int _len, string& _src_addr, unsigned short& _src_port)
+	int Socket::RecvFrom(char* _buf, int _len, string& _src_addr, unsigned short& _src_port)
 	{
 		int result = -1;
 		if (m_protocol != Protocol::UDP)
@@ -276,14 +278,13 @@ namespace net
 		return ipList;
 	}
 
-	Socket & Socket::operator=(Socket && _s)
+	Socket& Socket::operator=(Socket&& _s)
 	{
 		std::swap(m_protocol, _s.m_protocol);
 		std::swap(m_socket, _s.m_socket);
 		std::swap(m_sin, _s.m_sin);
 		return *this;
 	}
-
 
 	void Socket::_PrintErrorAndExit(string _msg)
 	{
@@ -306,4 +307,4 @@ namespace net
 			_port = ntohs(_addr->sin_port);
 		}
 	}
-}
+} //namespace net

@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Serializer.h
-*
-* @date 25/10/2018
-*
-* @brief Serialize some object into char arrays
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Serializer.h
+ *
+ * @date 25/10/2018
+ *
+ * @brief Serialize some object into char arrays
+ *
+ */
 
 #ifndef _BINSERIALIZER_H
 #define _BINSERIALIZER_H
@@ -39,7 +39,8 @@ private:
 	bool m_write = false;
 
 public:
-	enum class Mode {
+	enum class Mode
+	{
 		Read,
 		Write
 	};
@@ -64,13 +65,16 @@ public:
 	void resize(size_t _size);
 
 	// Templates
-	template<class T> void serialize(T& _v);
+	template<class T>
+	void serialize(T& _v);
 
 	// Specializations
-	template<> void serialize(string& _v);
+	template<>
+	void serialize(string& _v);
 
 	// Overload with vector type
-	template<typename T> void serialize(vector<T>& _v);
+	template<typename T>
+	void serialize(vector<T>& _v);
 
 	// Conversion to string
 	inline operator string() { return string(m_buffer, m_endIndex); }

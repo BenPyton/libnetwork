@@ -1,20 +1,21 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Server.cpp
-*
-* @date 17/07/2019
-*
-* @brief Define a server class, communicating with multiple clients
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Server.cpp
+ *
+ * @date 17/07/2019
+ *
+ * @brief Define a server class, communicating with multiple clients
+ *
+ */
 
 #include "Network/Socket.h"
 #include "Network/Message.h"
 #include "Network/Server.h"
 #include "Network/SocketException.h"
 
-namespace net{
+namespace net
+{
 	Server::Server()
 		: MsgSystem()
 	{
@@ -63,7 +64,7 @@ namespace net{
 		delete m_pServer;
 	}
 
-	void Server::send(Socket * _client, string _msg)
+	void Server::send(Socket* _client, string _msg)
 	{
 		if (m_running)
 		{
@@ -92,7 +93,7 @@ namespace net{
 
 			timeout.tv_sec = 0;
 			timeout.tv_usec = 200 * 1000;
-			if(select(m_pServer->GetSock() + 1, &acceptfds, NULL, NULL, &timeout) < 0) // update sockets in file descriptor
+			if (select(m_pServer->GetSock() + 1, &acceptfds, NULL, NULL, &timeout) < 0) // update sockets in file descriptor
 			{
 				DebugLog("\n[Thread AcceptClient] Error during select.\n");
 			}
@@ -110,4 +111,4 @@ namespace net{
 
 		DebugLog("[Thread AcceptClient] Thread terminated !\n");
 	}
-}
+} //namespace net

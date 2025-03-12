@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Serializer.inl
-*
-* @date 25/10/2018
-*
-* @brief Serialize some object into char arrays
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Serializer.inl
+ *
+ * @date 25/10/2018
+ *
+ * @brief Serialize some object into char arrays
+ *
+ */
 
 template<typename T>
 void Serializer::serialize(T& _v)
@@ -46,7 +46,7 @@ void Serializer::serialize(T& _v)
 }
 
 template<>
-void Serializer::serialize(string & _v)
+void Serializer::serialize(string& _v)
 {
 	if (m_write)
 	{

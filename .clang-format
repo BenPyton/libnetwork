@@ -1,0 +1,25 @@
+---
+BasedOnStyle: Microsoft
+UseTab: Always
+LineEnding: CRLF
+ColumnLimit: 0
+SortIncludes: Never
+PointerAlignment: Left
+InsertNewlineAtEOF: true
+SpaceBeforeCpp11BracedList: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortBlocksOnASingleLine: Always
+AlignOperands: AlignAfterOperator
+BinPackArguments: false
+PackConstructorInitializers: Never
+BreakConstructorInitializers: BeforeComma
+AccessModifierOffset: -4
+SpaceAfterTemplateKeyword: false
+SpacesInLineCommentPrefix:
+  Minimum: 0
+  Maximum: -1
+AlignAfterOpenBracket: BlockIndent
+NamespaceIndentation: All
+IndentPPDirectives: BeforeHash

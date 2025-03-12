@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Message.cpp
-*
-* @date 08/02/2019
-*
-* @brief Manage fragmented message transiting throught network
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Message.cpp
+ *
+ * @date 08/02/2019
+ *
+ * @brief Manage fragmented message transiting throught network
+ *
+ */
 
 #include "Network/Message.h"
 #include "Utils.h"
@@ -25,13 +25,14 @@ namespace net
 		return _a.header.frag_id < _b.header.frag_id;
 	}
 
-
 	Message::Message(uint64_t _id, uint16_t _nbFrag)
-		: m_id(_id), m_nbFrag(_nbFrag), m_completed(false)
+		: m_id(_id)
+		, m_nbFrag(_nbFrag)
+		, m_completed(false)
 	{
 	}
 
-	Message::Message(Message && _m)
+	Message::Message(Message&& _m)
 	{
 		_m._swap(*this);
 	}
@@ -42,7 +43,7 @@ namespace net
 		return *this;
 	}
 
-	void Message::addFragment(const Fragment & _f)
+	void Message::addFragment(const Fragment& _f)
 	{
 		if (_f.header.msg_id == m_id)
 		{
@@ -62,7 +63,7 @@ namespace net
 		return str;
 	}
 
-	vector<Fragment> Message::FragmentString(uint16_t _id, const string & _str)
+	vector<Fragment> Message::FragmentString(uint16_t _id, const string& _str)
 	{
 		vector<Fragment> fragments;
 
@@ -78,7 +79,7 @@ namespace net
 			}
 
 			Fragment frag;
-			frag.header = { (Fragment::ID)_id, (Fragment::ID)i, (Fragment::ID)nbFrag, (Fragment::Size)fragSize };
+			frag.header = {(Fragment::ID)_id, (Fragment::ID)i, (Fragment::ID)nbFrag, (Fragment::Size)fragSize};
 			memcpy(frag.data.data(), _str.data() + i * Fragment::data_max_size, fragSize);
 
 			fragments.push_back(frag);
@@ -87,7 +88,7 @@ namespace net
 		return fragments;
 	}
 
-	vector<Fragment> Message::FragmentBuffer(uint16_t _id, const char * _buf, size_t _size)
+	vector<Fragment> Message::FragmentBuffer(uint16_t _id, const char* _buf, size_t _size)
 	{
 		vector<Fragment> fragments;
 
@@ -103,7 +104,7 @@ namespace net
 			}
 
 			Fragment frag;
-			frag.header = { (Fragment::ID)_id, (Fragment::ID)i, (Fragment::ID)nbFrag, (Fragment::Size)fragSize };
+			frag.header = {(Fragment::ID)_id, (Fragment::ID)i, (Fragment::ID)nbFrag, (Fragment::Size)fragSize};
 			memcpy(frag.data.data(), _buf + i * Fragment::data_max_size, fragSize);
 
 			fragments.push_back(frag);
@@ -112,7 +113,6 @@ namespace net
 		return fragments;
 	}
 
-
 	void Message::_swap(Message& _m)
 	{
 		std::swap(m_id, _m.m_id);
@@ -120,4 +120,4 @@ namespace net
 		std::swap(m_fragments, _m.m_fragments);
 		std::swap(m_completed, _m.m_completed);
 	}
-}
+} //namespace net

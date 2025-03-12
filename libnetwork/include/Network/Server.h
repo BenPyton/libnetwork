@@ -1,13 +1,13 @@
 /*
-* @author PELLETIER Benoit
-*
-* @file Server.h
-*
-* @date 17/07/2019
-*
-* @brief Define a server class, communicating with multiple clients
-*
-*/
+ * @author PELLETIER Benoit
+ *
+ * @file Server.h
+ *
+ * @date 17/07/2019
+ *
+ * @brief Define a server class, communicating with multiple clients
+ *
+ */
 
 #ifndef _SERVER_H
 #define _SERVER_H
@@ -17,7 +17,8 @@
 
 using namespace std;
 
-namespace net{
+namespace net
+{
 
 	class Socket;
 
@@ -45,6 +46,6 @@ namespace net{
 	private:
 		void _RunAcceptClient();
 	};
-}
+} //namespace net
 
 #endif // _SERVERV2_H
