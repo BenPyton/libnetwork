@@ -14,18 +14,19 @@
 namespace net
 {
 	SocketException::SocketException() noexcept
-		: std::exception()
+		: std::runtime_error("")
+		, m_code(-1)
 	{
 	}
 
 	SocketException::SocketException(int _code) noexcept
-		: std::exception()
+		: std::runtime_error("")
 		, m_code(_code)
 	{
 	}
 
 	SocketException::SocketException(char const* const _msg, int _code) noexcept
-		: std::exception(_msg)
+		: std::runtime_error(_msg)
 		, m_code(_code)
 	{
 	}

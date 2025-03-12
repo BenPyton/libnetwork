@@ -27,6 +27,9 @@ namespace net
 		void disconnect();
 
 		void send(std::string _msg);
+
+	private:
+		class Socket* m_pClient = nullptr;
 	};
 } //namespace net
 

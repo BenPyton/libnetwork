@@ -67,10 +67,6 @@ public:
 	template<class T>
 	void serialize(T& _v);
 
-	// Specializations
-	template<>
-	void serialize(string& _v);
-
 	// Overload with vector type
 	template<typename T>
 	void serialize(std::vector<T>& _v);
@@ -81,6 +77,9 @@ public:
 private:
 	void _reallocate(const std::size_t size);
 };
+
+template<>
+void Serializer::serialize(std::string& _v);
 
 #include "Serializer.inl"
 

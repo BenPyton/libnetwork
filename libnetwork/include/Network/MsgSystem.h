@@ -19,20 +19,20 @@
 #include <list>
 #include <string>
 #include "Event.h"
+#include "Exports.h"
 
 namespace net
 {
-
 	class Socket;
 
-	class MsgSystem
+	class LIBNETWORK_API MsgSystem
 	{
-	protected:
+	private:
 		typedef std::list<Socket*>::iterator SocketIt;
 
 		struct PairClientMessage
 		{
-			Socket* socket;
+			Socket* socket = nullptr;
 			std::string message;
 		};
 
@@ -40,9 +40,8 @@ namespace net
 		std::vector<Socket*> m_connectedSockets;
 		std::vector<Socket*> m_disconnectedSockets;
 
-		std::atomic<bool> m_running = false;
+		std::atomic<bool> m_running {false};
 
-	private:
 		std::thread m_threadSendMsg;
 		std::thread m_threadRecvMsg;
 		std::thread m_threadEvent;
@@ -63,9 +62,6 @@ namespace net
 		Event<Socket*> m_disconnectionEvent;
 
 	public:
-		MsgSystem();
-		~MsgSystem();
-
 		// Event triggered when a message is received from any connected socket
 		Event<Socket*, std::string>& onMessageReceived() { return m_messageReceivedEvent; }
 
@@ -85,6 +81,8 @@ namespace net
 		void AddSocket(Socket* _sock);
 		void RemoveSocket(SocketIt _it);
 		void AddMsgToSendQueue(Socket* _sock, std::string _msg);
+
+		inline void setRunning(bool _running) { m_running = _running; }
 
 	private:
 		void _RunSendMessages();

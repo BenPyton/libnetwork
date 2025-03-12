@@ -17,6 +17,7 @@
 #include <vector>
 #include <array>
 #include <set>
+#include <cstdint>
 #include "Utils.h"
 
 namespace net

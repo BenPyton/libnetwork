@@ -13,13 +13,12 @@
 #define _SOCKETEXCEPTION_H
 
 #include <iostream>
-#include <exception>
+#include <stdexcept>
 #include "Exports.h"
 
 namespace net
 {
-
-	class LIBNETWORK_API SocketException : public std::exception
+	class LIBNETWORK_API SocketException : public std::runtime_error
 	{
 	private:
 		int m_code = -1;

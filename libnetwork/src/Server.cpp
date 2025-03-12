@@ -23,7 +23,7 @@ namespace net
 
 	Server::~Server()
 	{
-		if (m_running)
+		if (isRunning())
 		{
 			shutdown();
 		}
@@ -31,28 +31,28 @@ namespace net
 
 	void Server::launch(string _addr, unsigned short _port)
 	{
-		if (m_running)
+		if (isRunning())
 		{
-			throw new exception("Can't launch server when already running.");
+			throw new runtime_error("Can't launch server when already running.");
 		}
 
 		m_pServer = new Socket(_addr, _port, Protocol::TCP);
 		m_pServer->Bind();
 		m_pServer->Listen();
 
-		m_running = true;
+		setRunning(true);
 		RunThreads();
 		m_threadServerAccept = thread(&Server::_RunAcceptClient, this);
 	}
 
 	void Server::shutdown()
 	{
-		if (!m_running)
+		if (!isRunning())
 		{
-			throw exception("Can't stop server when not running.");
+			throw runtime_error("Can't stop server when not running.");
 		}
 
-		m_running = false;
+		setRunning(false);
 
 		// wait for threads to terminate
 		m_threadServerAccept.join();
@@ -66,7 +66,7 @@ namespace net
 
 	void Server::send(Socket* _client, string _msg)
 	{
-		if (m_running)
+		if (isRunning())
 		{
 			AddMsgToSendQueue(_client, _msg);
 		}
@@ -83,7 +83,7 @@ namespace net
 		timeval timeout;
 
 		DebugLog("[Thread AcceptClient] Thread started !\n");
-		while (m_running)
+		while (isRunning())
 		{
 			//clear the socket set
 			FD_ZERO(&acceptfds);

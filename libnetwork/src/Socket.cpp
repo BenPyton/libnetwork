@@ -87,7 +87,7 @@ namespace net
 		if (m_protocol != Protocol::TCP)
 		{
 			_PrintErrorAndExit("Socket is not in TCP Protocol");
-			return Socket(NULL, NULL, Protocol::UDP);
+			return Socket(NULL, 0, Protocol::UDP);
 		}
 
 		sockaddr_in clientAddr;

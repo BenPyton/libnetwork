@@ -10,6 +10,7 @@
  */
 
 #include "Network/Serializer.h"
+#include <cstring>
 
 Serializer::Serializer(size_t _bufsize, Mode _mode)
 	: m_buffer(nullptr)
@@ -85,5 +86,44 @@ void Serializer::_reallocate(const size_t _size)
 	{
 		m_buffer = (char*)realloc(m_buffer, _size);
 		m_bufferSize = _size;
+	}
+}
+
+template<>
+void Serializer::serialize(std::string& _v)
+{
+	if (m_write)
+	{
+		std::size_t size = _v.size();
+		std::size_t byteSize = size * sizeof(char);
+
+		// add string size before data
+		serialize(size);
+
+		// Reallocate if necessary
+		if (m_bufferSize < m_index + byteSize)
+		{
+			resize(m_index + byteSize);
+		}
+
+		// add string data
+		memcpy(m_buffer + m_index, _v.c_str(), byteSize);
+		m_index += byteSize;
+		if (m_index > m_endIndex)
+			m_endIndex = m_index;
+	}
+	else // read
+	{
+		std::size_t size;
+		// get string size before data
+		serialize(size);
+		// get string data (char by char)
+		_v.resize(size);
+		for (std::size_t i = 0; i < size; i++)
+		{
+			_v[i] = (m_buffer + m_index)[i];
+		}
+
+		m_index += size * sizeof(char);
 	}
 }

@@ -60,7 +60,11 @@ int main()
 	server.launch(localIPs[0], port);
 
 	while (server.isRunning())
-		; // Main loop (here we have nothing to do)
+	{
+		// Main loop (here we have nothing to do)
+		// We just slow down the thread pace to avoid comsuming too much cpu for an empty loop.
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	}
 
 end:
 	net::Socket::Quit();

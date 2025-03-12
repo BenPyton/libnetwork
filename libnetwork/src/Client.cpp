@@ -23,7 +23,7 @@ namespace net
 
 	Client::~Client()
 	{
-		if (m_running)
+		if (isRunning())
 		{
 			disconnect();
 		}
@@ -31,29 +31,29 @@ namespace net
 
 	void Client::connect(std::string _addr, unsigned short _port)
 	{
-		if (m_running)
+		if (isRunning())
 		{
 			throw SocketException("Can't connect client when already connected.", 0);
 		}
 
-		Socket* socket = new Socket(_addr, _port, Protocol::TCP);
-		socket->Connect();
+		m_pClient = new Socket(_addr, _port, Protocol::TCP);
+		m_pClient->Connect();
 		DebugLog("Successfully connected to server.\n");
 
-		AddSocket(socket);
+		AddSocket(m_pClient);
 
-		m_running = true;
+		setRunning(true);
 		RunThreads();
 	}
 
 	void Client::disconnect()
 	{
-		if (!m_running)
+		if (!isRunning())
 		{
 			throw SocketException("Can't disconnect client when not connected.", 0);
 		}
 
-		m_running = false;
+		setRunning(false);
 
 		WaitEndOfThreads();
 		CloseAllSockets();
@@ -61,9 +61,9 @@ namespace net
 
 	void Client::send(std::string _msg)
 	{
-		if (m_running)
+		if (isRunning())
 		{
-			AddMsgToSendQueue(m_sockets.front(), _msg);
+			AddMsgToSendQueue(m_pClient, _msg);
 		}
 	}
 } //namespace net

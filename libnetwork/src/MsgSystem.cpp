@@ -18,14 +18,6 @@
 
 namespace net
 {
-	MsgSystem::MsgSystem()
-	{
-	}
-
-	MsgSystem::~MsgSystem()
-	{
-	}
-
 	void MsgSystem::RunThreads()
 	{
 		m_threadSendMsg = std::thread(&MsgSystem::_RunSendMessages, this);
@@ -213,7 +205,7 @@ namespace net
 						// add the new fragment to the msg
 						msg->addFragment(fragment);
 
-						DebugLog("[Thread RecvMsg] Message #%d nb frag: %d/%d\n", msg->id(), msg->size(), msg->totalFrag());
+						DebugLog("[Thread RecvMsg] Message #%llu nb frag: %zu/%hu\n", msg->id(), msg->size(), msg->totalFrag());
 						//DebugLog("Message Completed: %s\n", msg->isComplete() ? "Yes" : "No");
 						if (msg->isComplete())
 						{
