@@ -1,13 +1,6 @@
-/*
- * @author PELLETIER Benoit
- *
- * @file Message.cpp
- *
- * @date 08/02/2019
- *
- * @brief Manage fragmented message transiting throught network
- *
- */
+// Copyright (c) 2019 Benoit Pelletier
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE or copy at https://www.boost.org/LICENSE_1_0.txt)
 
 #include "Network/Message.h"
 #include "Utils.h"

@@ -1,13 +1,6 @@
-/*
- * @author PELLETIER Benoit
- *
- * @file Server.h
- *
- * @date 17/07/2019
- *
- * @brief Define a server class, communicating with multiple clients
- *
- */
+// Copyright (c) 2019 Benoit Pelletier
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE or copy at https://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef _SERVER_H
 #define _SERVER_H

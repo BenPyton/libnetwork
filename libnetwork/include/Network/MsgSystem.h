@@ -1,13 +1,6 @@
-/*
- * @author PELLETIER Benoit
- *
- * @file MsgSystem.h
- *
- * @date 18/07/2019
- *
- * @brief Define a base class that manage messages
- *
- */
+// Copyright (c) 2019 Benoit Pelletier
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE or copy at https://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef _MSGSYSTEM_H
 #define _MSGSYSTEM_H

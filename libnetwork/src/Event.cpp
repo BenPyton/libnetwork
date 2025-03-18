@@ -1,13 +1,6 @@
-/*
- * @author PELLETIER Benoit
- *
- * @file Event.cpp
- *
- * @date 17/11/2018
- *
- * @brief Event class that call subscribers when emitted
- *
- */
+// Copyright (c) 2018 Benoit Pelletier
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE or copy at https://www.boost.org/LICENSE_1_0.txt)
 
 #include "Network/Event.h"
 

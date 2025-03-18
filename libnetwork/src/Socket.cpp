@@ -1,13 +1,6 @@
-/*
- * @author PELLETIER Benoit
- *
- * @file Socket.cpp
- *
- * @date 26/10/2018
- *
- * @brief Windows socket class
- *
- */
+// Copyright (c) 2018 Benoit Pelletier
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE or copy at https://www.boost.org/LICENSE_1_0.txt)
 
 #include "Network/Socket.h"
 #include <Ws2tcpip.h>
