@@ -1,6 +1,10 @@
 .vs/
+.vscode/
 
-bin/
+[Bb]uild/
+[Bb]in/
+[Tt]mp/
+[Ll]ib/
+[Oo]ut/
 
-tmp/
-lib/
+[Cc][Mm]ake[Uu]ser[Pp]resets.json

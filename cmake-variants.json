@@ -1,0 +1,32 @@
+{
+    "buildType": {
+        "default": "debug",
+        "choices": {
+            "debug": {
+                "short": "Debug",
+                "long": "Build with debugging information",
+                "buildType": "Debug"
+            },
+            "release": {
+                "short": "Release",
+                "long": "Optimize the resulting binaries",
+                "buildType": "Release"
+            }
+        }
+    },
+    "shared": {
+        "default": "shared",
+        "choices": {
+            "shared": {
+                "short": "Shared",
+                "long": "Build a shared library",
+                "linkage": "shared"
+            },
+            "static": {
+                "short": "Static",
+                "long": "Build a static library",
+                "linkage": "static"
+            }
+        }
+    }
+}
